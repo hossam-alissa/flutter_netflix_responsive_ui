@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_netflix_responsive_ui/data/data.dart';
 import '../widgets/widgets.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -12,11 +13,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    _scrollController = ScrollController()..addListener(() {
-      setState(() {
-        _scrollOffset = _scrollController.offset;
+    _scrollController = ScrollController()
+      ..addListener(() {
+        setState(() {
+          _scrollOffset = _scrollController.offset;
+        });
       });
-    });
     super.initState();
   }
 
@@ -25,10 +27,12 @@ class _HomeScreenState extends State<HomeScreen> {
     _scrollController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
     return Scaffold(
+      extendBodyBehindAppBar: true,
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.grey[850],
         child: const Icon(Icons.cast),
@@ -36,12 +40,16 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       appBar: PreferredSize(
         preferredSize: Size(screenSize.width, 50.0),
-        child: CustomAppBar(scrollOffset: _scrollOffset,),
+        child: CustomAppBar(
+          scrollOffset: _scrollOffset,
+        ),
       ),
       body: CustomScrollView(
         controller: _scrollController,
         slivers: [
-          SliverToBoxAdapter(child: Container(height: 1000.0,color: Colors.blue,),)
+          SliverToBoxAdapter(
+            child: ContentHeader(featuredContent: sintelContent),
+          ),
         ],
       ),
     );

@@ -7,10 +7,11 @@ class ContentList extends StatelessWidget {
   final bool isOriginals;
 
   ContentList({
+   @required Key key,
     @required this.title,
     @required this.contentList,
     this.isOriginals = false,
-  });
+  }):super(key: key);
 
   @override
   Widget build(BuildContext context) {

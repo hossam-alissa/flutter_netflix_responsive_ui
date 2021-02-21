@@ -1,24 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_netflix_responsive_ui/data/data.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../cubits/app_bar/app_bar_cubit.dart';
+import '../data/data.dart';
 import '../widgets/widgets.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key key}): super(key: key);
+  const HomeScreen({Key key}) : super(key: key);
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
   ScrollController _scrollController;
-  double _scrollOffset = 0.0;
+
+  // double _scrollOffset = 0.0;
 
   @override
   void initState() {
     _scrollController = ScrollController()
       ..addListener(() {
-        setState(() {
-          _scrollOffset = _scrollController.offset;
-        });
+        context.bloc<AppBarCubit>().setOffset(_scrollController.offset);
       });
     super.initState();
   }
@@ -41,8 +43,10 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       appBar: PreferredSize(
         preferredSize: Size(screenSize.width, 50.0),
-        child: CustomAppBar(
-          scrollOffset: _scrollOffset,
+        child: BlocBuilder<AppBarCubit, double>(
+          builder: (context, scrollOffset) {
+            return CustomAppBar(scrollOffset: scrollOffset);
+          },
         ),
       ),
       body: CustomScrollView(
@@ -65,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: ContentList(
               key: PageStorageKey('myList'),
               title: "Netflix Originals",
-              contentList : originals,
+              contentList: originals,
               isOriginals: true,
             ),
           ),
@@ -73,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: ContentList(
               key: PageStorageKey('originals'),
               title: "My List",
-              contentList : myList,
+              contentList: myList,
             ),
           ),
           SliverPadding(
@@ -82,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: ContentList(
                 key: PageStorageKey('trending'),
                 title: "Trending",
-                contentList : trending,
+                contentList: trending,
               ),
             ),
           ),
